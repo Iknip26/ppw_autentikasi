@@ -1,0 +1,453 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+/* svg {
+    margin-top: -50px;
+  } */
+body {
+    font-family: "Poppins", sans-serif;
+    text-decoration: none;
+}
+
+#banner_img {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1.5)),
+        url(bahanwebsite/bg1.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    /* position: relative; */
+}
+
+.container-logo {
+    margin-left: 2%;
+    /* column-gap: 20px; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo {
+    width: 100px;
+    /* position: absolute;
+    top: 3%;
+    left: 5vw; */
+}
+
+.container-logo h1 {
+    padding-top: 30px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    color: #c2c2c2;
+}
+
+.teks_banner {
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    color: #c2c2c2;
+    padding-top: 150px;
+}
+
+#banner_img .teks_banner h2 {
+    font-size: 100px;
+    margin-top: -30px;
+    font-weight: 700;
+}
+
+#banner_img .teks_banner p {
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+}
+
+#sidenav {
+    width: 300px;
+    height: 100vh;
+    position: fixed;
+    right: -300px;
+    top: 0;
+    background-color: #c2c2c2;
+    z-index: 2;
+    transition: right 0.5s;
+}
+
+nav ul li {
+    list-style: none;
+    margin: 30px 20px;
+    margin-left: -10px;
+}
+
+nav ul li a {
+    font-family: "Poppins", sans-serif;
+    text-decoration: none;
+    color: black;
+}
+
+nav ul li a:hover {
+    font-family: "Poppins", sans-serif;
+    text-decoration: none;
+    font-weight: 700;
+    color: #f0f8ff;
+}
+
+nav ul li a span {
+    align-items: center;
+    border-bottom: 0.5px solid #000000;
+}
+
+#tombol-menu {
+    width: 50px;
+    height: 50px;
+    background: #ffe7a0;
+    text-align: center;
+    position: fixed;
+    right: 30px;
+    top: 20px;
+    border-radius: 3px;
+    z-index: 3;
+    cursor: pointer;
+}
+
+#tombol-menu img {
+    width: 20px;
+    margin-top: 15px;
+    transition: 1s;
+}
+
+/* NEWS */
+#news {
+    margin-top: -80px;
+    background-color: white;
+}
+.tittle-text {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.tittle-text h1 {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.tittle-text p {
+    font-size: 20px;
+}
+
+.news-box {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    text-align: center;
+}
+
+.news1 {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.news1 img {
+    width: 400px;
+    height: 300px;
+    border-radius: 50px;
+}
+.news1 img:hover {
+    width: 420px;
+    height: 320px;
+    border-radius: 50px;
+    transition: 0.2s;
+}
+
+.news1 a {
+    font-family: "Poppins", sans-serif;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #000000;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.news1 a:hover {
+    color: #4b4b4b;
+    transition: 0.2s;
+}
+
+/* World Record */
+#world-record {
+    margin-top: -80px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1.5)),
+        url(bahanwebsite/wr.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#world-record h1 {
+    font-size: 70px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: #f0f8ff;
+    margin-bottom: 20px;
+}
+
+.tombol-wr {
+    margin-top: 20px;
+}
+.tombol-wr a {
+    width: 250px;
+    text-decoration: none;
+    margin: 0 16px;
+    padding: 15px 10px;
+    color: aliceblue;
+    border: 0.5px solid aliceblue;
+    z-index: 1;
+    position: relative;
+    transition: color 0.5s;
+    margin-bottom: 40px;
+}
+
+.tombol-wr a span {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: aliceblue;
+    z-index: -1;
+    transition: 0.5s;
+}
+
+.tombol-wr a:hover span {
+    width: 100%;
+}
+
+.tombol-wr a:hover {
+    color: black;
+}
+
+/* RUBIKPEDIA */
+#Rubikpedia {
+    padding-top: 50px;
+    background-color: black;
+}
+
+.isi-RP {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#box-gambar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#isi-gambar1 {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)),
+        url(bahanwebsite/isi_gambar1.jpg);
+    background-size: cover;
+    background-position-x: -220px;
+    background-position-y: 50px;
+}
+#isi-gambar2 {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)),
+        url(bahanwebsite/isi_gambar2.png);
+    background-size: 200px, 500px;
+    /* background-repeat: no-repeat; */
+    background-position-x: -220px;
+    background-position-y: 0px;
+}
+#isi-gambar3 {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)),
+        url(bahanwebsite/isi_gambar3.jpg);
+    background-size: cover;
+    background-position-x: -240px;
+    background-position-y: 0px;
+}
+#isi-gambar4 {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)),
+        url(bahanwebsite/isi_gambar4.jpg);
+    background-size: cover;
+    background-position-x: -50px;
+    background-position-y: 50px;
+}
+.isi-RP h1 {
+    margin-top: 50px;
+    font-size: 40px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: aliceblue;
+    margin-bottom: 20px;
+}
+
+.tombol-rp {
+    margin-top: 20px;
+    padding-bottom: 50px;
+}
+.tombol-rp a {
+    width: 250px;
+    text-decoration: none;
+    margin: 0 16px;
+    padding: 15px 10px;
+    color: aliceblue;
+    border: 0.5px solid #f0f8ff;
+    z-index: 1;
+    position: relative;
+    transition: color 0.5s;
+    margin-bottom: 40px;
+}
+
+.tombol-rp a span {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: aliceblue;
+    z-index: -1;
+    transition: 0.5s;
+}
+
+.tombol-rp a:hover span {
+    width: 100%;
+}
+
+.tombol-rp a:hover {
+    color: black;
+}
+
+#footer {
+    padding-top: 150px;
+    padding-bottom: 20px;
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#list-gambar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    column-gap: 20px;
+}
+
+#footer p {
+    margin-top: 10px;
+    color: aliceblue;
+}
+
+@media screen and (max-width: 770px) {
+    #container-logo {
+        margin-top: -20px;
+    }
+    #banner_img .teks_banner h2 {
+        font-size: 44px;
+        margin-top: -20px;
+    }
+    #tombol-menu {
+        margin-top: 10px;
+    }
+
+    .container-logo {
+        padding: 15px;
+    }
+
+    .logo {
+        width: 60px;
+        /* position: absolute;
+      top: 3%;
+      left: 5vw; */
+    }
+
+    .container-logo h1 {
+        padding-top: 30px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 20px;
+        color: #ffe7a0;
+    }
+
+    .tittle-text h1 {
+        font-size: 30px;
+    }
+    .tittle-text p {
+        font-size: 16px;
+    }
+
+    #sidenav {
+        width: 200px;
+        height: 100vh;
+        position: fixed;
+        right: -200px;
+        top: 0;
+        background-color: #ffe7a0;
+        z-index: 2;
+        transition: right 0.5s;
+    }
+
+    .news1 {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 20px;
+    }
+    .news1 img {
+        margin-top: -15px;
+        width: 300px;
+        height: 200px;
+    }
+
+    .news1 img:hover {
+        width: 320px;
+        height: 220px;
+    }
+    #world-record h1 {
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: 30px;
+    }
+
+    .tombol-wr a {
+        padding: 7px 7px;
+        font-size: 12px;
+    }
+    #Rubikpedia #list-gambar {
+        flex-direction: row;
+    }
+    #Rubikpedia h1 {
+        margin-top: -280px;
+        font-size: 20px;
+    }
+
+    .tombol-rp a {
+        padding: 7px 7px;
+        font-size: 12px;
+    }
+}
