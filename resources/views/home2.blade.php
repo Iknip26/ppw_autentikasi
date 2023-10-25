@@ -1,3 +1,6 @@
+<@php
+    session_start();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +26,12 @@
                 <li><a href="">About Me</a></li>
                 <li><a href="">Portofolio</a></li>
                 <li><a href="">Contact</a></li>
+                    <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                        </form>
+                    </li>
             </ul>
         </div>
     </div>

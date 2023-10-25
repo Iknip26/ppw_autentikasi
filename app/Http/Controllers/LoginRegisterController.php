@@ -101,8 +101,7 @@ class LoginRegisterController extends Controller
     public function dashboard()
     {
         if (Auth::check()) {
-            $CV = datacvs::latest()->paginate(3);
-            return view('admin.index', compact('CV'));
+            return view('home2');
         }
 
         return redirect()->route('login')
@@ -119,9 +118,11 @@ class LoginRegisterController extends Controller
      */
     public function logout(Request $request)
     {
+        session_start();
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        session_destroy();
         return redirect()->route('login')
             ->withSuccess('You have logged out successfully!');;
     }
