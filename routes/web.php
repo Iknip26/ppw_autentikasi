@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginRegisterController;
-use App\Http\Controllers\web_controller;
+use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\CVController;
 
 /*
@@ -29,22 +29,7 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 });
 
+Route::post('/post-email', [SendEmailController::class, 'store'])->name('post-email');
 
-Route::controller(CVController::class)->group(function() {
-    // Route::get('/admin_home', 'index')->name('admin.index');
-    Route::get('/admin_posts', 'create')->name('admin.create');
-    Route::post('/admin_store','store')->name('admin.store');
-    Route::get('/admin_destroy/{id}','destroy')->name('admin.destroy');
-    Route::get('/admin_show/{id}','show')->name('admin.show');
-    Route::get('/admin_edit/{id}','edit')->name('admin.edit');
-    Route::post('/admin_update/{id}','update')->name('admin.update');
-});
-
-
-Route::controller(web_controller::class)->group(function() {
-    Route::get('/public_home', 'index')->name('public.index');
-});
-
-Route::controller(web_controller::class)->group(function() {
-    Route::get('/public_home', 'index')->name('public.index');
-});
+Route::get('/send-mail', [SendEmailController::class,
+'index'])->name('kirim-email');
