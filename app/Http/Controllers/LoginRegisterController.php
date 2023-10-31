@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\datacvs;
 use App\Http\Controllers\Controller;
+use App\Mail\regisConfirmation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 
 class LoginRegisterController extends Controller
@@ -49,8 +51,11 @@ class LoginRegisterController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password)
         ]);
+
+        Mail::to($request->email)->send(new regisConfirmation($request));
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);

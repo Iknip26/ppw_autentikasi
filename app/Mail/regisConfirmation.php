@@ -9,19 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class sendEmail extends Mailable
+class regisConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
-    public function __construct(array $data)
+    public function __construct($request)
     {
-    $this->data = $data;
+        $this->data = $request;
     }
-    
+
     public function build()
     {
-    return $this->subject($this->data['subject'])
-    ->view('emails.sendemails');
+    return $this->subject("Konfirmasi Registrasi")
+    ->view('emails.verifikasi_regis');
     }
-   }
-   
+}
