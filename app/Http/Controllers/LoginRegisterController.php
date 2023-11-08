@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-
+use PhpParser\Node\Expr\Cast\String_;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class LoginRegisterController extends Controller
 {
@@ -20,7 +22,7 @@ class LoginRegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except([
-            'logout', 'dashboard'
+            'logout', 'dashboard', 'dashboards', 'edit', 'update', 'delete'
         ]);
     }
 
@@ -45,23 +47,53 @@ class LoginRegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
+            'image_profile' => 'image|nullable|max:1999'
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password)
-        ]);
+        if($request->hasFile('image_profile')){
 
-        Mail::to($request->email)->send(new regisConfirmation($request));
+            $filenameWithExt = $request->file('image_profile')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image_profile')->getClientOriginalExtension();
+            $filenameSimpan = $filename . "_" . time() . "." . $extension;
+            $image = Image::make($request->file('image_profile'));
+            $image->save('photos/'.$filenameSimpan);
 
-        $credentials = $request->only('email', 'password');
-        Auth::attempt($credentials);
-        $request->session()->regenerate();
-        return redirect()->route('dashboard')
-            ->withSuccess('You have successfully registered & logged in!');
+            $pathSquare = ('photos/'.$filenameSimpan);
+            $image->fit(250,250)->save($pathSquare);
+
+            $image = Image::make($request->file('image_profile'));
+
+            $pathThumbnail = ('photos/'.$filenameSimpan);
+            $image->fit(350,200)->save($pathThumbnail);
+
+
+            // $isi_gambar = $request->file('image_profile');
+            // $fileName = $isi_gambar->hashName();
+            // $image = Image::make($isi_gambar)->fit(100, 100);
+            // $image->save('storage/photos/'.$filenameSimpan);
+
+
+            $userAccount = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'image_profile' => $filenameSimpan
+            ]);
+
+            $credentials = $request->only('email', 'password');
+            Auth::attempt($credentials);
+            $request->session()->regenerate();
+            // return redirect()->route('dashboard', $userAccount->id)
+            //     ->withSuccess('You have successfully registered & logged in!');
+            return redirect()->route('dashboards')
+                ->withSuccess('You have successfully registered & logged in!');
+        }else{
+            return redirect()->route('register')
+            ->withSuccess('GAGAL!');
+        }
     }
 
     /**
@@ -80,6 +112,8 @@ class LoginRegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
@@ -87,15 +121,35 @@ class LoginRegisterController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('dashboard')
-                ->withSuccess('You have successfully logged in!');
-        }
 
-        return back()->withErrors([
-            'email' => 'Your provided credentials do not match in our records.',
-        ])->onlyInput('email');
+        if (Auth::attempt($credentials)) {
+
+            $accounts = User::where('email', $request->email)->first();
+
+            if ($accounts) {
+                $request->session()->regenerate();
+
+                // return redirect()->route('dashboard', $accounts->id)
+                //     ->withSuccess('You have successfully logged in!');
+
+                return redirect()->route('dashboards')
+                    ->withSuccess('You have successfully logged in!');
+
+            } else {
+                return back()->withErrors([
+                    'email' => 'Your provided credentials do not match in our records.',
+                ])->onlyInput('email');
+            }
+        } else {
+            return back()->withErrors([
+                'email' => 'Your provided credentials do not match in our records.',
+            ])->onlyInput('email');
+        }
+    }
+
+    public function dashboards(){
+        $datas = User::all();
+        return view('auth.dashboard', compact('datas'));
     }
 
     /**
@@ -103,10 +157,12 @@ class LoginRegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function dashboard()
     {
         if (Auth::check()) {
-            return view('home2');
+            $datas = User::find()->get();
+            return view('auth.dashboard', compact('datas'));
         }
 
         return redirect()->route('login')
@@ -130,5 +186,70 @@ class LoginRegisterController extends Controller
         session_destroy();
         return redirect()->route('login')
             ->withSuccess('You have logged out successfully!');;
+    }
+
+
+    public function edit(Request $request, String $id){
+
+        $accounts = User::find($id)->first();
+        return view('auth.edit', compact('accounts'));
+
+    }
+
+    public function update(Request $request, String $id){
+
+        $accounts = User::findOrFail($id);
+
+        if ($request->hasFile('image_profile')) {
+
+            $filenameWithExt = $request->file('image_profile')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('image_profile')->getClientOriginalExtension();
+            $filenameSimpan = $filename . "_" . time() . "." . $extension;
+            $image = Image::make($request->file('image_profile'));
+            $image->save('photos/'.$filenameSimpan);
+
+            $pathSquare = ('photos/'.$filenameSimpan);
+            $image->fit(250,250)->save($pathSquare);
+
+            $image = Image::make($request->file('image_profile'));
+
+            $pathThumbnail = ('photos/'.$filenameSimpan);
+            Storage::delete('photos/'.$accounts->image_profile);
+            $image->fit(350,200)->save($pathThumbnail);
+
+            $accounts->update([
+                'image_profile'     => $filenameSimpan,
+                'name'   => $request->name,
+                'email'   => $request->email,
+            ]);
+
+            return redirect()->route('dashboards')
+                ->withSuccess('Profil berhasil terupdate.');
+
+        } else {
+
+            $accounts->update([
+                'name'   => $request->name,
+                'email'   => $request->email,
+            ]);
+
+            return redirect()->route('dashboards')
+                    ->withSuccess('Profil berhasil terupdate.');
+            }
+    }
+
+    public function delete(String $id){
+
+        $accounts = User::find($id);
+        Storage::delete('photos/'.$accounts->image_profile);
+        // $accounts->delete();
+
+        $accounts->update([
+            'image_profile'     => null,
+        ]);
+
+        return redirect()->route('dashboards')
+                ->withSuccess('gambar berhasil di hapus.');
     }
 }

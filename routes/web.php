@@ -25,8 +25,13 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
-    Route::get('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard/{id}', 'dashboard')->name('dashboard');
+    Route::get('/dashboards', 'dashboards')->name('dashboards');
     Route::post('/logout', 'logout')->name('logout');
+
+    Route::get('/delete/{id}', 'delete')->name('delete');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::post('/update/{id}', 'update')->name('update');
 });
 
 Route::post('/post-email', [SendEmailController::class, 'store'])->name('post-email');
