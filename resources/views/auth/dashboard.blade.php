@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-md-6" style="line-height: 35px;"><?php
                                     if ($data_akun->image_profile != null){
-                                        ?> <embed src="{{ asset('photos/thumbnail/'.$data_akun->image_profile) }}">
+                                        ?> <embed src="{{ asset('storage/photos/thumbnail/'.$data_akun->image_profile) }}">
                                      <?php }else{
                                         ?><p>TIDAK ADA GAMBAR</p><?php
                                      }; ?>

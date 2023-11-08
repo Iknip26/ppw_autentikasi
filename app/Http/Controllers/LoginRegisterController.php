@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class LoginRegisterController extends Controller
 {
@@ -52,28 +53,47 @@ class LoginRegisterController extends Controller
         ]);
 
         if($request->hasFile('image_profile')){
+            $image = $request->file('image_profile');
+
+            $folderPathOriginal = public_path('storage/photos/original');
+            $folderPathThumbnail = public_path('storage/photos/thumbnail');
+            $folderPathSquare = public_path('storage/photos/square');
+
+            if (!File::isDirectory($folderPathOriginal)) {
+                File::makeDirectory($folderPathOriginal, 0777, true, true);
+            }
+            if (!File::isDirectory($folderPathThumbnail)) {
+                File::makeDirectory($folderPathThumbnail, 0777, true, true);
+            }
+            if (!File::isDirectory($folderPathSquare)) {
+                File::makeDirectory($folderPathSquare, 0777, true, true);
+            }
 
             $filenameWithExt = $request->file('image_profile')->getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->file('image_profile')->getClientOriginalExtension();
-            $filenameSimpan = $filename . "_" . time() . "." . $extension;
-            $image = Image::make($request->file('image_profile'));
-            $image->save('photos/original/'.$filenameSimpan);
+            $filenameSimpan = $filename . '_' . time() . '.' . $extension;
 
-            $pathSquare = ('photos/square/'.$filenameSimpan);
-            $image->fit(250,250)->save($pathSquare);
+            // Simpan gambar asli
+            $path = $request->file('image_profile')->storeAs('photos/original', $filenameSimpan);
 
-            $image = Image::make($request->file('image_profile'));
+            // Buat thumbnail dengan lebar dan tinggi yang diinginkan
+            $thumbnailPath = public_path('storage/photos/thumbnail/' . $filenameSimpan);
+            Image::make($image)
+                ->fit(150, 150)
+                ->save($thumbnailPath);
 
-            $pathThumbnail = ('photos/thumbnail/'.$filenameSimpan);
-            $image->fit(350,200)->save($pathThumbnail);
+            // Buat versi persegi dengan lebar dan tinggi yang sama
+            $squarePath = public_path('storage/photos/square/' . $filenameSimpan);
+            Image::make($image)
+                ->fit(300, 300)
+                ->save($squarePath);
 
-
-            // $isi_gambar = $request->file('image_profile');
-            // $fileName = $isi_gambar->hashName();
-            // $image = Image::make($isi_gambar)->fit(100, 100);
-            // $image->save('storage/photos/'.$filenameSimpan);
-
+            $path = $filenameSimpan;
+        }
+        else {
+            $path = null;
+        }
 
             $userAccount = User::create([
                 'name' => $request->name,
@@ -90,10 +110,6 @@ class LoginRegisterController extends Controller
             //     ->withSuccess('You have successfully registered & logged in!');
             return redirect()->route('dashboards')
                 ->withSuccess('You have successfully registered & logged in!');
-        }else{
-            return redirect()->route('register')
-            ->withSuccess('GAGAL!');
-        }
     }
 
     /**
@@ -201,22 +217,46 @@ class LoginRegisterController extends Controller
         $accounts = User::findOrFail($id);
 
         if ($request->hasFile('image_profile')) {
-
             $filenameWithExt = $request->file('image_profile')->getClientOriginalName();
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             $extension = $request->file('image_profile')->getClientOriginalExtension();
-            $filenameSimpan = $filename . "_" . time() . "." . $extension;
-            $image = Image::make($request->file('image_profile'));
-            $image->save('photos/original/'.$filenameSimpan);
+            $filenameSimpan = $filename . '_' . time() . '.' . $extension;
 
-            $pathSquare = ('photos/square/'.$filenameSimpan);
-            $image->fit(250,250)->save($pathSquare);
+            $photo = $accounts->image_profile;
 
-            $image = Image::make($request->file('image_profile'));
+            // Hapus gambar asli
+            $originalPath = public_path('storage/photos/original/' . $photo);
+            if (File::exists($originalPath)) {
+                File::delete($originalPath);
+            }
+            //simpan gambar asli
+            $path = $request->file('image_profile')->storeAs('photos/original', $filenameSimpan);
 
-            $pathThumbnail = ('photos/thumbnail/'.$filenameSimpan);
-            Storage::delete('photos/'.$accounts->image_profile);
-            $image->fit(350,200)->save($pathThumbnail);
+            // Hapus gambar thumbnail
+            $thumbnailPath = public_path('storage/photos/thumbnail/' . $photo);
+            if (File::exists($thumbnailPath)) {
+                File::delete($thumbnailPath);
+            }
+
+            // Buat thumbnail dengan lebar dan tinggi yang diinginkan
+            $thumbnailPath = public_path('storage/photos/thumbnail/' . $filenameSimpan);
+            Image::make($request->image_profile)
+                ->fit(150, 150)
+                ->save($thumbnailPath);
+
+            // Hapus gambar square
+            $squarePath = public_path('storage/photos/square/' . $photo);
+            if (File::exists($squarePath)) {
+                File::delete($squarePath);
+            }
+
+            // Buat versi square dengan lebar dan tinggi yang sama
+            $squarePath = public_path('storage/photos/square/' . $filenameSimpan);
+            Image::make($request->image_profile)
+                ->fit(300, 300)
+                ->save($squarePath);
+
+            $path = $filenameSimpan;
 
             $accounts->update([
                 'image_profile'     => $filenameSimpan,
@@ -242,8 +282,30 @@ class LoginRegisterController extends Controller
     public function delete(String $id){
 
         $accounts = User::find($id);
-        Storage::delete('photos/'.$accounts->image_profile);
-        // $accounts->delete();
+
+        if (!$accounts) {
+            return redirect()->route('users')->with('error', 'User not found');
+        }
+
+        $photo = $accounts->photo;
+
+          // Hapus gambar asli
+          $originalPath = public_path('storage/photos/original/' . $photo);
+          if (File::exists($originalPath)) {
+              File::delete($originalPath);
+          }
+
+          // Hapus gambar thumbnail
+          $thumbnailPath = public_path('storage/photos/thumbnail/' . $photo);
+          if (File::exists($thumbnailPath)) {
+              File::delete($thumbnailPath);
+          }
+
+          // Hapus gambar square
+          $squarePath = public_path('storage/photos/square/' . $photo);
+          if (File::exists($squarePath)) {
+              File::delete($squarePath);
+          }
 
         $accounts->update([
             'image_profile'     => null,
