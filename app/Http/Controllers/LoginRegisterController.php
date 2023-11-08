@@ -58,14 +58,14 @@ class LoginRegisterController extends Controller
             $extension = $request->file('image_profile')->getClientOriginalExtension();
             $filenameSimpan = $filename . "_" . time() . "." . $extension;
             $image = Image::make($request->file('image_profile'));
-            $image->save('photos/'.$filenameSimpan);
+            $image->save('photos/original/'.$filenameSimpan);
 
-            $pathSquare = ('photos/'.$filenameSimpan);
+            $pathSquare = ('photos/square/'.$filenameSimpan);
             $image->fit(250,250)->save($pathSquare);
 
             $image = Image::make($request->file('image_profile'));
 
-            $pathThumbnail = ('photos/'.$filenameSimpan);
+            $pathThumbnail = ('photos/thumbnail/'.$filenameSimpan);
             $image->fit(350,200)->save($pathThumbnail);
 
 
@@ -207,14 +207,14 @@ class LoginRegisterController extends Controller
             $extension = $request->file('image_profile')->getClientOriginalExtension();
             $filenameSimpan = $filename . "_" . time() . "." . $extension;
             $image = Image::make($request->file('image_profile'));
-            $image->save('photos/'.$filenameSimpan);
+            $image->save('photos/original/'.$filenameSimpan);
 
-            $pathSquare = ('photos/'.$filenameSimpan);
+            $pathSquare = ('photos/square/'.$filenameSimpan);
             $image->fit(250,250)->save($pathSquare);
 
             $image = Image::make($request->file('image_profile'));
 
-            $pathThumbnail = ('photos/'.$filenameSimpan);
+            $pathThumbnail = ('photos/thumbnail/'.$filenameSimpan);
             Storage::delete('photos/'.$accounts->image_profile);
             $image->fit(350,200)->save($pathThumbnail);
 
