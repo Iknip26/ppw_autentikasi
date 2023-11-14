@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginRegisterController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,15 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/delete/{id}', 'delete')->name('delete');
     Route::get('/edit/{id}', 'edit')->name('edit');
     Route::post('/update/{id}', 'update')->name('update');
+});
+
+Route::controller(GalleryController::class)->group(function() {
+    Route::get('/gallery', 'index')->name('gallery.index');
+    Route::get('/gallery/create', 'create')->name('gallery.create');
+    Route::post('/gallery/store', 'store')->name('gallery.store');
+    Route::get('/gallery/edit/{id}', 'edit')->name('gallery.edit');
+    Route::post('/gallery/update/{id}', 'update')->name('gallery.update');
+    Route::get('/destroy/{id}', 'destroy')->name('gallery.destroy');
 });
 
 Route::post('/post-email', [SendEmailController::class, 'store'])->name('post-email');

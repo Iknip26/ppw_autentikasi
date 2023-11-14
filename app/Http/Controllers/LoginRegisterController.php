@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\GalleryController;
 
 class LoginRegisterController extends Controller
 {
@@ -89,12 +90,10 @@ class LoginRegisterController extends Controller
                 ->fit(300, 300)
                 ->save($squarePath);
 
-            $path = $filenameSimpan;
         }
         else {
             $path = null;
         }
-
             $userAccount = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
