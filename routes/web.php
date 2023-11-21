@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginRegisterController;
 use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\GreetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +17,6 @@ use App\Http\Controllers\GalleryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/register', 'register')->name('register');
