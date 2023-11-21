@@ -58,11 +58,12 @@ class LoginRegisterController extends Controller
 
             $folderPathOriginal = public_path('storage/photos/original');
             $folderPathThumbnail = public_path('storage/photos/thumbnail');
-            $folderPathSquare = public_path('storage/photos/square');
 
+            $folderPathSquare = public_path('storage/photos/square');
             if (!File::isDirectory($folderPathOriginal)) {
                 File::makeDirectory($folderPathOriginal, 0777, true, true);
             }
+
             if (!File::isDirectory($folderPathThumbnail)) {
                 File::makeDirectory($folderPathThumbnail, 0777, true, true);
             }
