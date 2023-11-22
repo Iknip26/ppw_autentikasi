@@ -72,38 +72,36 @@ class GalleryController extends Controller
     * )
 
     * @OA\Post(
-    * path="/api/gallery",
+    * path="/api/gallery/store",
     * tags={"gallery"},
     * summary="Tambah Gambar",
     * description="Ini adalah dokumentasi untuk menambah gambar pada gallery",
     * operationId="galllery.store",
-    * @OA\Parameter(
-    * name="tittle",
-    * description="judul gambar",
-    * required=true,
-    * in="query",
-    * @OA\Schema(
-    * type="string"
-    * )
-    * ),
-    * @OA\Parameter(
-    * name="description",
-    * description="deskripsi gambar",
-    * required=true,
-    * in="query",
-    * @OA\Schema(
-    * type="string"
-    * )
-    * ),
-    * @OA\Parameter(
-    * name="image_url",
-    * description="gambar",
-    * required=true,
-    * in="query",
-    * @OA\Schema(
-    * type="image"
-    * )
-    * ),
+    * @OA\RequestBody(
+     *         required=true,
+     *         description="Data untuk mengunggah gambar",
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="title",
+     *                     description="Judul Upload",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     description="Deskripsi Gambar",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="picture",
+     *                     description="File Gambar",
+     *                     type="string",
+     *                     format="binary"
+     *                 ),
+     *             )
+     *         )
+     *     ),
     * @OA\Response(
     * response="default",
     * description="Proses Berhasil"
@@ -134,8 +132,7 @@ class GalleryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-{
+    public function store(Request $request){
     // Validasi input
     $rules = [
         'title' => 'required',

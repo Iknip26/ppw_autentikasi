@@ -53,6 +53,7 @@ class LoginRegisterController extends Controller
             'image_profile' => 'image|nullable|max:1999'
         ]);
 
+
         if($request->hasFile('image_profile')){
             $image = $request->file('image_profile');
 

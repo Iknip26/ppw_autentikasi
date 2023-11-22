@@ -40,42 +40,39 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
 
-        $title = $request->input
-        // // Validasi input
-        // $this->validate($request, [
-        //     'title' => 'required|max:255',
-        //     'description' => 'required',
-        //     'picture' => 'image|nullable|max:1999'
-        //     ]);
+        $title = $request->input('title');
+        $description = $request->input('description');
+        $picture = $request->file('picture');
 
-        // // Proses upload gambar
-        // if ($request->hasFile('picture')) {
-        //     $filenameWithExt = $request->file('picture')->getClientOriginalName();
-        //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //     $extension = $request->file('picture')->getClientOriginalExtension();
-        //     $basename = uniqid() . time();
+        $parameters = [
+            'title' => $title,
+            'description' => $description,
+            'picture' => $picture,
+        ];
 
-        //     // Nama file untuk berbagai ukuran
-        //     $smallFilename = "small_{$basename}.{$extension}";
-        //     $mediumFilename = "medium_{$basename}.{$extension}";
-        //     $largeFilename = "large_{$basename}.{$extension}";
-        //     $filenameSimpan = "{$basename}.{$extension}";
+        $client = new Client();
+        $url = "http://localhost:8000/api/gallery/store";
+        $response = $client->request('POST', $url, [
+            'multipart' => [
+                [
+                    'name' => 'title',
+                    'contents' => $title,
+                ],
+                [
+                    'name' => 'description',
+                    'contents' => $description,
+                ],
+                [
+                    'name' => 'picture',
+                    'contents' => fopen($picture->getPathname(), 'r'),
+                    'filename' => $picture->getClientOriginalName(),
+                ],
+            ],
+        ]);
 
-        //     // Simpan gambar
-        //     $path = $request->file('picture')->storeAs('posts_image', $filenameSimpan);
-        // } else {
-        //     // Jika tidak ada gambar, gunakan gambar default
-        //     $filenameSimpan = 'noimage.png';
-        // }
-
-        // // Simpan data post ke database
-        // $post = new Post;
-        // $post->picture = $filenameSimpan;
-        // $post->title = $request->input('title');
-        // $post->description = $request->input('description');
-        // $post->save();
-
-        // Redirect ke halaman gallery dengan pesan sukses
+        // $content = $response->getBody()->getContents();
+        // $content_array = json_decode($content, true);
+        // $galleries = $content_array;
         return redirect()->route('gallery.index');
     }
 

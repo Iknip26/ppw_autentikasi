@@ -31,5 +31,5 @@ Route::get('greet', [GreetController::class,
 Route::get('/gallery', [GalleryController::class,
 'index'])->name('gallery');
 
-Route::get('/gallery/store', [GalleryController::class,
+Route::post('/gallery/store', [GalleryController::class,
 'store'])->name('gallery.store');
